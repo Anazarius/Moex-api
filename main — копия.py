@@ -87,7 +87,7 @@ mycursor.execute("""
         user_id INT UNSIGNED NOT NULL,
         share_id INT UNSIGNED NOT NULL,
         count INT UNSIGNED NOT NULL,
-        data_purchase DATE NOT NULL,
+        data_purchase DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES Users(id),
         FOREIGN KEY (share_id) REFERENCES Shares(id)
     )
@@ -98,6 +98,7 @@ mycursor.execute("""
     BEFORE INSERT ON User_share
     FOR EACH ROW
     BEGIN
+        SET NEW.data_purchase = NOW();
         IF NEW.id > 999999 THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error: id value exceeds maximum allowed value(max=999999)';
         END IF;
