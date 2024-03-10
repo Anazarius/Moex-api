@@ -29,6 +29,7 @@ def process_data():
         insert_user_query = "INSERT INTO Users (id, name, last_name, password, balance, status_id) VALUES (%s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE name = VALUES(name), password = VALUES(password), balance = VALUES(balance), status_id = VALUES(status_id)"
         mycursor.executemany(insert_user_query, users_data)
 
+def process_data_dynamic():
         api_url = "http://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/2023-12-20/boards/tqbr/securities?iss.meta=off&history.columns=SHORTNAME,SECID,TRADEDATE,VOLUME,NUMTRADES,LOW,HIGH,OPEN,CLOSE&start=143"
 
         try:
@@ -169,3 +170,4 @@ def process_data():
     
 if __name__ == "__main__":
     process_data()
+    process_data_dynamic()

@@ -1,4 +1,3 @@
-# auth.py
 from flask import session, redirect, url_for
 from database import mycursor, mydb
 from functools import wraps

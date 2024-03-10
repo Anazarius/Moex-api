@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from data_processing import process_data
+from data_processing import process_data_dynamic
 from auth import login, register, logout_user, get_current_user, login_required
 import secrets
 
@@ -42,7 +42,7 @@ def home():
     if global_df is not None:
         current_user = get_current_user()
         return render_template('home.html', username=current_user, table=global_df.to_html())
-    df = process_data()
+    df = process_data_dynamic()
     global_df = df
     current_user = get_current_user()
     return render_template('home.html', username=current_user, table=df.to_html())
