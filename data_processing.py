@@ -5,6 +5,8 @@ from database import mycursor, mydb
 import pandas as pd
 
 def process_data():
+    # Функция заносит в базу данных статичные данные (статусы и тестовые пользователи).
+    # Принимает массив дынных и через executemany добавляет их в базу данных
     data_inserted_flag = True
     if data_inserted_flag:
         statuses_data = [

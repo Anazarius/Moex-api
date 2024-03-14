@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <title>Share Details</title>
+</head>
+
+<body>
+    <div class="menu-button" onclick="toggleMenu()">☰</div>
+    <div class="login-form">
+        <div class="menu" id="menu">
+            <a href="/profile">Profile</a>
+            <a href="/share_list">Shares list</a>
+            <a href="#">Portfolio</a>
+            <a href="#">Balance</a>
+            <a href="/logout">Logout</a>
+        </div>
+        <h1>Share Details</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tag</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ share_data.tag }}</td>
+                    <td>{{ share_data.name }}</td>
+                    <td>{{ share_data.open }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+    </script>
+</body>
+
+</html>

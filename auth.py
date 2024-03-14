@@ -47,6 +47,47 @@ def login(name, password):
     else:
         return False
 
+def update_user_profile(old_name, name, last_name, password):
+    try:
+        query = "UPDATE Users SET name = %s, last_name = %s, password = %s WHERE name = %s"
+        values = (name, last_name, password, old_name)
+        mycursor.execute(query, values)
+        mydb.commit()
+        return True
+    except Exception as e:
+        print(f"Error during profile update: {e}")
+        return False
+
+def get_share():
+    try:
+        query = "SELECT id, tag, name, open FROM Data"
+        mycursor.execute(query)
+        shares = mycursor.fetchall()
+        return shares
+    except Exception as e:
+        print(f"Error fetching shares: {e}")
+        return None
+
+def get_share_by_id(share_id):
+    try:
+        query = "SELECT tag, name, open FROM Data WHERE id = %s"
+        values = (share_id,)
+        mycursor.execute(query, values)
+        share_data = mycursor.fetchone()
+
+        if share_data:
+            share = {
+                'tag': share_data[0],
+                'name': share_data[1],
+                'open': share_data[2]
+            }
+            return share
+        else:
+            return None
+    except Exception as e:
+        print(f"Error fetching share by ID {share_id}: {e}")
+        return None
+
 def logout_user():
     session.pop('name', None)
 

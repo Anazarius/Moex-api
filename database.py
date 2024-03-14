@@ -38,7 +38,7 @@ def setup_database():
     mycursor.execute("""
         CREATE TABLE IF NOT EXISTS Users (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(15) NOT NULL,
+            name VARCHAR(15) NOT NULL UNIQUE,
             last_name VARCHAR(20) NOT NULL,
             password VARCHAR(16) NOT NULL,
             balance FLOAT(8,2),

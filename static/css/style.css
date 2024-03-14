@@ -165,3 +165,37 @@
     color: #ffffff;
   }
   
+  .menu-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5em;
+    cursor: pointer;
+    z-index: 1000;
+    color: #fff;
+}
+
+.menu {
+    display: none;
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    background: #fff;
+    border: 1px solid #b12816;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 999;
+}
+
+.menu a {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: #b12816;
+    font-size: 1em;
+}
+
+.menu a:hover {
+    background: #b12816;
+    color: #fff;
+}
