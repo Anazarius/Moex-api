@@ -19,6 +19,10 @@ body {
     font-size: 1.3em;
 }
 
+.container {
+    text-align: center;
+}
+
 table {
     width: 80%;
     margin: 20px auto;
@@ -74,6 +78,60 @@ tr:hover {
     background: #b12816;
     color: #fff;
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.button-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: black;
+    padding: 16px 24px;
+    margin-top: 8px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.buy-button {
+    background-color: #4CAF50;
+}
+
+.sell-button {
+    background-color: #f44336;
+}
+
+.favorite-button {
+    background-color: yellow;
+}
+
+input[type=number] {
+    width: 100%;
+    padding: 14px 20px;
+    margin-top: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+
 .none {
     text-decoration: none;
     color: black;

@@ -3,3 +3,4 @@
 - pip install requests
 - pip install pandas
 - pip install mysql.connector
+- pip install matplotlib

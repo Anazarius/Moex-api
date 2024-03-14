@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from data_processing import process_data_dynamic
-from auth import login, register, logout_user, get_current_user, login_required, get_user_by_username, update_user_profile, get_share, get_share_by_id
+from auth import login, register, logout_user, get_current_user, login_required, get_user_by_username, update_user_profile, get_share, get_share_by_id, buy_current_share, sell_current_share, get_max_share_quantity, add_share_to_favorites, is_in_favorites
+from graph import fetch_price_history, plot_price_history, parse_price_history
 import secrets
 
 app = Flask(__name__)
@@ -15,6 +16,7 @@ def login_route():
         password = request.form['password']
 
         if login(name, password):
+            test = process_data_dynamic()
             return redirect(url_for('profile'))
         else:
             return render_template('login.html', error='Invalid credentials')
@@ -60,18 +62,75 @@ def share_list():
     share_data = get_share()
     return render_template('share_list.html', share_data=share_data)
 
+from flask import render_template
+
 @app.route("/share/<int:share_id>")
 @login_required
 def share_detail(share_id):
     all_share_data = get_share()
-
     share_data = get_share_by_id(share_id)
 
     if share_data is not None:
-        return render_template('share_detail.html', share_data=share_data)
+        
+        tag = share_data['tag']
+        price_history_xml = fetch_price_history(tag)
+        dates, prices = parse_price_history(price_history_xml)
+        price_history_base64 = plot_price_history(dates, prices)
+        current_user = get_current_user()
+        user_data = get_user_by_username(current_user)
+        user_id= user_data['id']
+        max_value = get_max_share_quantity(user_data, share_id)
+        is_favorite = is_in_favorites(user_id, share_id)
+        
+        return render_template('share_detail.html', share_data=share_data, price_history=price_history_base64, max_value=max_value, is_favorite=is_favorite)
     else:
         return render_template('share_list.html', share_data=all_share_data)
 
+
+@app.route("/buy_share/<int:share_id>", methods=['POST'])
+@login_required
+def buy_share(share_id):
+    if request.method == 'POST':
+        count = int(request.form['count'])
+        user = get_user_by_username(get_current_user())
+        share_data = get_share_by_id(share_id)
+        success = buy_current_share(user, share_data, count)
+        if success:
+            return redirect(url_for('share_detail', share_id=share_id))
+        else:
+            return redirect(url_for('share_detail', share_id=share_id, error="Purchase failed"))
+
+@app.route("/sell_share/<int:share_id>", methods=['POST'])
+@login_required
+def sell_share(share_id):
+    if request.method == 'POST':
+        count = int(request.form['count'])
+        user = get_user_by_username(get_current_user())
+        share_data = get_share_by_id(share_id)
+        success = sell_current_share(user, share_data, count)
+        if success:
+            return redirect(url_for('share_detail', share_id=share_id))
+        else:
+            return redirect(url_for('share_detail', share_id=share_id, error="Purchase failed"))
+
+@app.route("/add_to_favorites/<int:share_id>", methods=['POST'])
+@login_required
+def add_to_favorites(share_id):
+    user = get_user_by_username(get_current_user())
+    user_id = user['id']
+    is_favorite = is_in_favorites(user_id, share_id)
+    
+    if is_favorite:
+        success = True
+        add_share_to_favorites(user_id, share_id)
+    else:
+        success = False
+        add_share_to_favorites(user_id, share_id)
+
+    return redirect(url_for('share_detail', share_id=share_id, is_favorite=is_favorite, success=success))
+
+
+   
 @app.route("/update_profile", methods=['POST'])
 @login_required
 def update_profile():
