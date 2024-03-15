@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
-    <title>Shares List</title>
+    <title>Deposit</title>
 </head>
+
 <body>
     <div class="menu-button" onclick="toggleMenu()">☰</div>
     <div class="login-form">
@@ -17,25 +20,19 @@
             <a href="/balance">Balance</a>
             <a href="/logout">Logout</a>
         </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Tag</th>
-                    <th>Title</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for share in share_data %}
-                    <tr>
-                        <td><a  class="none" href="/share/{{ share[0] }}">{{ share[1] }}</a></td>
-                        <td><a  class="none" href="/share/{{ share[0] }}">{{ share[2] }}</a></td>
-                        <td><a  class="none" href="/share/{{ share[0] }}">{{ share[3] }}</a></td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
+        <div class="container">
+            <h1 class="center-text">Deposit</h1>
+            <div class="balance">
+                <h2>Current Balance: {{ user_balance }} P</h2>
+            </div>
+            <form method="post" action="/deposit_route">
+                <div class="input-group">
+                    <label for="amount">Enter amount to deposit:</label>
+                    <input type="number" value="0" id="amount" name="amount" placeholder="Amount" required>
+                </div>
+                <button class="action-button" type="submit">Deposit</button>
+            </form>
+        </div>
     </div>
     <script>
         function toggleMenu() {
@@ -44,4 +41,5 @@
         }
     </script>
 </body>
+
 </html>

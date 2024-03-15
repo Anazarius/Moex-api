@@ -211,5 +211,22 @@ def add_share_to_favorites(user_id, share_id):
         mycursor.execute(query, values)
         mydb.commit()
         return False, "Added to favorites successfully."
+    
+def get_user_balance(username):
+    user = get_user_by_username(username)
+    if user:
+        return user['balance']
+    else:
+        return None
 
-
+def deposit(username, amount):
+    user = get_user_by_username(username)
+    if user:
+        new_balance = user['balance'] + amount
+        query = "UPDATE Users SET balance = %s WHERE name = %s"
+        values = (new_balance, username)
+        mycursor.execute(query, values)
+        mydb.commit()
+        return True
+    else:
+        return False

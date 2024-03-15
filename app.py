@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from data_processing import process_data_dynamic
-from auth import login, register, logout_user, get_current_user, login_required, get_user_by_username, update_user_profile, get_share, get_share_by_id, buy_current_share, sell_current_share, get_max_share_quantity, add_share_to_favorites, is_in_favorites
+from auth import login, register, logout_user, get_current_user, login_required, get_user_by_username, update_user_profile, get_share, get_share_by_id, buy_current_share, sell_current_share, get_max_share_quantity, add_share_to_favorites, is_in_favorites, get_user_balance, deposit
 from graph import fetch_price_history, plot_price_history, parse_price_history
 import secrets
 
@@ -129,8 +129,6 @@ def add_to_favorites(share_id):
 
     return redirect(url_for('share_detail', share_id=share_id, is_favorite=is_favorite, success=success))
 
-
-   
 @app.route("/update_profile", methods=['POST'])
 @login_required
 def update_profile():
@@ -145,6 +143,23 @@ def update_profile():
             return redirect(url_for('profile'))
         else:
             return render_template('profile.html', user=get_user_by_username(name), error='Failed to update profile')
+
+@app.route("/balance")
+@login_required
+def balance():
+    name = get_current_user()
+    user_balance = get_user_balance(name)
+    return render_template('balance.html', user_balance=user_balance)
+
+@app.route("/deposit_route", methods=['POST'])
+@login_required
+def deposit_route():
+    if request.method == 'POST':
+        amount = int(request.form['amount'])
+        name = get_current_user()
+        deposit(name, amount)
+        user_balance = get_user_balance(name)
+        return render_template('balance.html', user_balance=user_balance)
 
 @app.route("/logout")
 def logout():
