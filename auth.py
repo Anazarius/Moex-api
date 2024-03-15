@@ -230,3 +230,13 @@ def deposit(username, amount):
         return True
     else:
         return False
+
+def update_user_status(user_id, new_status):
+    try:
+        query = "UPDATE Users SET status_id = %s WHERE id = %s"
+        values = (new_status, user_id)
+        mycursor.execute(query, values)
+        mydb.commit()
+        print("User status updated successfully")
+    except Exception as e:
+        print(f"Error updating user status: {e}")

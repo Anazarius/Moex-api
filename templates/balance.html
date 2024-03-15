@@ -14,9 +14,12 @@
     <div class="menu-button" onclick="toggleMenu()">☰</div>
     <div class="login-form">
         <div class="menu" id="menu">
+            {% if user_status == 2 %}
+                <a href="/">Stock rating</a>
+            {% endif %}
             <a href="/profile">Profile</a>
             <a href="/share_list">Shares list</a>
-            <a href="#">Portfolio</a>
+            <a href="/portfolio">Portfolio</a>
             <a href="/balance">Balance</a>
             <a href="/logout">Logout</a>
         </div>

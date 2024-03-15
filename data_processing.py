@@ -62,7 +62,17 @@ def process_data_dynamic():
 
                     insert_query_shares = "INSERT INTO Shares (name, tag, type) VALUES (%s, %s, %s)"
                     mycursor.executemany(insert_query_shares, shares_data)
-                    insert_query_data = "REPLACE INTO Data (name, tag, tradedate, volume, numtrades, low, high, open, close) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    insert_query_data = """
+    INSERT INTO Data (name, tag, tradedate, volume, numtrades, low, high, open, close)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    ON DUPLICATE KEY UPDATE
+        volume = VALUES(volume),
+        numtrades = VALUES(numtrades),
+        low = VALUES(low),
+        high = VALUES(high),
+        open = VALUES(open),
+        close = VALUES(close)
+"""
                     mycursor.executemany(insert_query_data, data)
                     
                     print(f"Добавлено {len(shares_data)} акций в таблицу Shares")

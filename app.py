@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from data_processing import process_data_dynamic
-from auth import login, register, logout_user, get_current_user, login_required, get_user_by_username, update_user_profile, get_share, get_share_by_id, buy_current_share, sell_current_share, get_max_share_quantity, add_share_to_favorites, is_in_favorites, get_user_balance, deposit
+from auth import login, register, logout_user, get_current_user, login_required, get_user_by_username, update_user_profile, get_share, get_share_by_id, buy_current_share, sell_current_share, get_max_share_quantity, add_share_to_favorites, is_in_favorites, get_user_balance, deposit, update_user_status
 from graph import fetch_price_history, plot_price_history, parse_price_history
 import secrets
 
@@ -11,12 +11,14 @@ global_df = None
 
 @app.route("/login", methods=['GET', 'POST'])
 def login_route():
+    global global_df
     if request.method == 'POST':
         name = request.form['name']
         password = request.form['password']
 
         if login(name, password):
-            test = process_data_dynamic()
+            df = process_data_dynamic()
+            global_df = df
             return redirect(url_for('profile'))
         else:
             return render_template('login.html', error='Invalid credentials')
@@ -48,6 +50,24 @@ def additive():
     global_df = df
     current_user = get_current_user()
     return render_template('additive.html', username=current_user, table=df.to_html())
+
+@app.route("/buy_additive", methods=['POST'])
+@login_required
+def buy_additive():
+    share_data = get_share()
+    current_user = get_current_user()
+    user_data = get_user_by_username(current_user)
+    user_status = user_data['status_id']
+    user_balance = get_user_balance(current_user)
+    additive_price = 50000
+
+    if user_balance >= additive_price:
+        user_id = user_data['id']
+        update_user_status(user_id, 2)
+        return render_template('share_list.html', share_data=share_data, user_status=user_status)
+    else:
+        flash("Insufficient balance. Please top up your balance.")
+        return redirect(url_for('balance'))
 
 @app.route("/profile")
 @login_required
