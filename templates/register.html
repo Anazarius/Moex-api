@@ -24,5 +24,8 @@
         <input class='lf--submit' type='submit' value='Register'>
         <a class='lf--forgot' href='/login'>Already have an account? Login</a>
     </form>
+        {% if error %}
+        <span class="error">{{ error }}</span>
+        {% endif %}
 </body>
 </html>

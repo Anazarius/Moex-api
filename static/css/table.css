@@ -131,6 +131,13 @@ input[type=number] {
     font-size: 16px;
 }
 
+.error {
+    color: #0011ff; /* Красный цвет текста */
+    font-size: 25px; /* Размер шрифта */
+    margin-top: 10px; /* Отступ сверху */
+    text-align: center; /* Выравнивание текста по центру */
+    font-weight: bold; /* Жирный шрифт */
+  }
 
 .none {
     text-decoration: none;

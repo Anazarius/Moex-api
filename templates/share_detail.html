@@ -18,10 +18,14 @@
             <a href="/profile">Profile</a>
             <a href="/share_list">Shares list</a>
             <a href="/portfolio">Portfolio</a>
+            <a href="/favorites">Favorites</a>
             <a href="/balance">Balance</a>
             <a href="/logout">Logout</a>
         </div>
         <div class="container">
+            {% if error %}
+                <span class="error">{{ error }}</span>
+            {% endif %}
             <h1>Share Details</h1>
             <table>
                 <thead>

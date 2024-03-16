@@ -85,14 +85,14 @@ def process_data_dynamic():
 
 
         user_share_data = [
-            (1, 1, 1, 5, date.today()),
-            (2, 2, 2, 10, date.today()),
-            (3, 3, 3, 15, date.today()),
-            (4, 4, 4, 20, date.today()),
-            (5, 5, 5, 25, date.today()),
+            (1, 1, 1, 5, 123, date.today()),
+            (2, 2, 2, 10, 123, date.today()),
+            (3, 3, 3, 15, 123, date.today()),
+            (4, 4, 4, 20, 123, date.today()),
+            (5, 5, 5, 25, 123, date.today()),
         ]
 
-        insert_user_share_query = "INSERT INTO User_share (id, user_id, share_id, count, data_purchase) VALUES (%s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE id = VALUES(id), user_id = VALUES(user_id), share_id = VALUES(share_id), count = VALUES(count), data_purchase = VALUES(data_purchase)"
+        insert_user_share_query = "INSERT INTO User_share (id, user_id, share_id, count, price_purchase, data_purchase) VALUES (%s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE id = VALUES(id), user_id = VALUES(user_id), share_id = VALUES(share_id), count = VALUES(count), price_purchase = VALUES(price_purchase), data_purchase = VALUES(data_purchase)"
         mycursor.executemany(insert_user_share_query, user_share_data)
 
         favorites_data = [

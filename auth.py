@@ -127,11 +127,12 @@ def buy_current_share(user, share_data, quantity):
         else:
             # Если записи не существует и количество не равно 0, добавляем новую запись о покупке акций
             insert_query = """
-                INSERT INTO User_share (user_id, share_id, count, data_purchase)
-                VALUES (%s, %s, %s, %s)
+            INSERT INTO User_share (user_id, share_id, count, price_purchase, data_purchase)
+            VALUES (%s, %s, %s, %s, %s)
             """
-            insert_values = (user['id'], share_id, quantity, today)
+            insert_values = (user['id'], share_id, quantity, float(share_data['close']), today)
             mycursor.execute(insert_query, insert_values)
+
 
         # Обновляем баланс пользователя
         update_balance_query = "UPDATE Users SET balance = balance - %s WHERE id = %s"
@@ -240,3 +241,53 @@ def update_user_status(user_id, new_status):
         print("User status updated successfully")
     except Exception as e:
         print(f"Error updating user status: {e}")
+
+def get_user_portfolio(user_id):
+    try:
+        query = """
+            SELECT
+                d.tag,
+                d.name,
+                us.count AS quantity,
+                d.close AS current_price,
+                (us.price_purchase * us.count) - (d.close * us.count) AS profit
+            FROM
+                User_share AS us
+            JOIN
+                Data AS d ON us.share_id = d.id
+            WHERE
+                us.user_id = %s
+        """
+        values = (user_id,)
+        mycursor.execute(query, values)
+        portfolio = mycursor.fetchall()
+        return portfolio
+    except Exception as e:
+        print(f"Error fetching user portfolio: {e}")
+        return []
+
+def update_user_balance(user_id, new_balance):
+    update_query = "UPDATE Users SET balance = %s WHERE id = %s"
+    mycursor.execute(update_query, (new_balance, user_id))
+    mydb.commit()
+
+
+def process_additive_purchase(user_id, user_balance, additive_price):
+    if user_balance >= additive_price:
+        update_user_status(user_id, 2)
+        update_user_balance(user_id, user_balance - additive_price)
+        return True
+    else:
+        return False
+
+def get_favorite_shares_with_details(user_id):
+    query = """
+    SELECT s.tag, s.name, s.close 
+    FROM favorites f 
+    JOIN data s ON f.share_id = s.id 
+    WHERE f.user_id = %s
+    """
+    values = (user_id,)
+    mycursor.execute(query, values)
+    favorite_shares = mycursor.fetchall()
+    return favorite_shares

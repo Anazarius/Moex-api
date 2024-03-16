@@ -84,6 +84,7 @@ def setup_database():
             user_id INT UNSIGNED NOT NULL,
             share_id INT UNSIGNED NOT NULL,
             count INT UNSIGNED NOT NULL,
+            price_purchase FLOAT(8,2) NOT NULL,
             data_purchase DATE NOT NULL,
             FOREIGN KEY (user_id) REFERENCES Users(id),
             FOREIGN KEY (share_id) REFERENCES Shares(id)

@@ -195,6 +195,14 @@
     font-size: 1em;
 }
 
+.error {
+  color: #0011ff; /* Красный цвет текста */
+  font-size: 25px; /* Размер шрифта */
+  margin-top: 10px; /* Отступ сверху */
+  text-align: center; /* Выравнивание текста по центру */
+  font-weight: bold; /* Жирный шрифт */
+}
+
 .menu a:hover {
     background: #b12816;
     color: #fff;

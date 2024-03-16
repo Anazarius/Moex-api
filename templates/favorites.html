@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
-    <title>Home</title>
+    <title>Favorites</title>
 </head>
+
 <body>
     <div class="menu-button" onclick="toggleMenu()">☰</div>
     <div class="login-form">
-        <div class="logo">
-            <h1>{{ name }}</h1>
-        </div>
         <div class="menu" id="menu">
             {% if user_status == 2 %}
                 <a href="/">Stock rating</a>
@@ -21,11 +20,31 @@
             <a href="/share_list">Shares list</a>
             <a href="/portfolio">Portfolio</a>
             <a href="/favorites">Favorites</a>
-            <a href="/balance">balance</a>
+            <a href="/balance">Balance</a>
             <a href="/logout">Logout</a>
         </div>
-    <h1>Welcome, {{ username }}!</h1>
-    {{ table | safe }}
+        <div class="container">
+            <h1>Favorites</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tag</th>
+                        <th>Title</th>
+                        <th>Current Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for share in shares %}
+                    <tr>
+                        <td>{{ share[0] }}</td>
+                        <td>{{ share[1] }}</td>
+                        <td>{{ share[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     <script>
         function toggleMenu() {
             var menu = document.getElementById("menu");
@@ -33,4 +52,5 @@
         }
     </script>
 </body>
+
 </html>
